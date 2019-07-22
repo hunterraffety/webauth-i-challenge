@@ -2,6 +2,7 @@ const db = require('../database/db-config');
 
 module.exports = {
   find,
+  findBy,
   findById,
   add
 };
