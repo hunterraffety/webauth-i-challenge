@@ -29,6 +29,18 @@ router.get('/users', (req, res) => {
 
 // route to create a user
 router.post('/register', (req, res) => {
-  Auth.add(user);
+  let user = req.body;
+
+  const hash = bcrypt.hashSync(user.password, 14);
+  user.password = hash;
+
+  Auth.add(user)
+    .then(saved => {
+      res.status(201).json(saved);
+    })
+    .catch(error => {
+      res.status(500).json(error);
+    });
 });
+
 module.exports = router;
