@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const router = express.Router();
 
 const Auth = require('./auth-model');
+const authenticate = require('../middleware/authentication-middleware');
 
 router.use(express.json());
 
@@ -17,14 +18,12 @@ router.get('/', (req, res) => {
 });
 
 // route to request all users
-router.get('/users', (req, res) => {
+router.get('/users', authenticate, (req, res) => {
   Auth.find()
-    .then(user => {
-      res.status(200).json(users);
+    .then(users => {
+      res.json(users);
     })
-    .catch(error => {
-      res.status(500).json(error);
-    });
+    .catch(error => res.send(error));
 });
 
 // route to create a user
