@@ -6,6 +6,7 @@ const router = express.Router();
 
 const Auth = require('./auth-model');
 const authenticate = require('../middleware/authentication-middleware');
+const restricted = require('../middleware/restricted-middleware');
 
 router.use(
   session({
@@ -32,7 +33,7 @@ router.get('/', (req, res) => {
 });
 
 // test to restricted route
-router.get('/restricted', (req, res) => {
+router.get('/restricted', restricted, (req, res) => {
   try {
     res.status(200).json({ message: `Hello.` });
   } catch (error) {
@@ -94,7 +95,7 @@ router.post('/login', (req, res) => {
     });
 });
 
-router.get('/restricted/logout', (req, res) => {
+router.get('/logout', (req, res) => {
   if (req.session) {
     req.session.destroy(err => {
       if (err) {
